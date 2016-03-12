@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="style.css">
+	</head>
+	<body>
+		<h1>HTTP</h1>
+		<b>-m action:</b><br>
+		Starts web server in current folder<br>
+		<b>-m args:</b><br>
+		--port=(port number) - Default: 80, Required: No<br>
+		--folder=(folder) - Default: "", Required: No<br>
+		<br>
+		<b>Contents:</b><br>
+		<a href="#init">init</a><br>
+		<a href="#addPage">addPage</a><br>
+		<a href="#run">run</a><br>
+		<br>
+		<!---->
+		<a name='read'></a>
+		<h2>[ ['http', 'init'], <i>'port'</i> ]</h2>
+		Prepares the HTTP module<br><br>
+		port: What port to run the web server on <b>Required</b><br>
+		<hr color="black">
+		<!---->
+		<a name='addPage'></a>
+		<h2>[ ['http', 'addPage'], <i>'page path'</i>, <i>'page content'</i> ]</h2>
+		Registers a page<br><br>
+		page path: What is the file path <b>Required</b><br>
+		page content: What is content of the page (HTML) <b>Required</b><br>
+		<hr color="black">
+		<!---->
+		<a name='run'></a>
+		<h2>[ ['http', 'run'] ]</h2>
+		Runs the server<br><br>
+		<hr color="black">
+		<!---->
+	</body>
+</html>

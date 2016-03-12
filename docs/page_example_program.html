@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="style.css">
+	</head>
+	<body>
+		<h1>Example program</h1>
+		<br>
+		<!---->
+		<h2>Chat program</h2>
+<pre>
+{
+	"imports": ["http"],
+	"program": [
+		[ ["log"], "Welcome to chat version 1.0"] ],
+		[ ["read"], "What is your name? ", "name" ],
+		[ ["log"], "Hello" ],
+		[ ["read"], "What are you doing? ", "doing" ],
+		[ ["log"], "Goodbye!" ]
+		[ ["log"], "----" ],
+		[ ["log"], "Name: "],
+		[ ["log"], ["var", "name"] ],
+		[ ["log"], "Doing: "],
+		[ ["log"], ["var", "doing"] ],
+		
+		[ ["http", "init"], 80 ],
+		[ ["http", "addPage"], "/", "Name: /name, Doing: /doing"],
+		[ ["http", "addPage"], "/name", ["var", "name"] ],
+		[ ["http", "addPage"], "/doing", ["var", "doing"] ],
+		[ ["http", "run"] ]
+	]
+}
+		<hr color="black">
+		<!---->
+	</body>
+</html>

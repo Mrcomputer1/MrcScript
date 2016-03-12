@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="style.css">
+	</head>
+	<body>
+		<h1>Extending</h1>
+		<br>
+		<!---->
+		<h2>Creating a module</h2>
+		Where the MrcScript.py file is located go into modules and create a (module name).py
+		<hr color="black">
+		<!---->
+		<h2>Creating a command</h2>
+<pre>
+def command-name(args, varlist, globalist):
+	(code)
+	return varlist
+</pre>
+		<hr color="black">
+		<!---->
+		<h2>Creating a module that you can use -m with</h2>
+<pre>
+def _module_(args):
+	(code)
+	# arg -a=test = {"a": "test"}, arg --abc=test = {"-abc": "test"}
+</pre>
+		<hr color="black">
+	</body>
+</html>
