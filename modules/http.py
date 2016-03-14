@@ -62,8 +62,10 @@ Connection: close
 """ + co
                 c.send(httpres.encode("utf-8"))
                 c.close()
+        except IndexError:
+            print("")
 
-def init(args, varlist, globallist):
+def init(args, varlist, globallist, runCommand):
     varlist["_modules_http"] = {
         "socket": socket.socket(),
         "pages": {},
@@ -76,38 +78,41 @@ The requested file was not found!"""
     varlist["_modules_http"]["socket"].bind(("0.0.0.0", args[0]))
     return varlist
 
-def addPage(args, varlist, globallist):
+def addPage(args, varlist, globallist, runCommand):
     varlist["_modules_http"]["pages"][args[0]] = args[1]
     return varlist
 
-def run(args, varlist, globallist):
+def run(args, varlist, globallist, runCommand):
     varlist["_modules_http"]["socket"].listen(5)
     while True:
         c, addr = varlist["_modules_http"]["socket"].accept()
         httprequest = c.recv(1024).decode("utf-8")
         httprequestparts = httprequest.split(" ")
-        if httprequestparts[1] in varlist["_modules_http"]["pages"]:
-            l = len(bytes(varlist["_modules_http"]["pages"][httprequestparts[1]], "utf-8"))
-            l = str(l+1)
-            co = varlist["_modules_http"]["pages"][httprequestparts[1]]
-            httpres = """HTTP/1.1 200 OK
-Content-Type: text/html; charset=UTF-8
-Content-Length: """ + l + """
-Server: Mrcomputer1 MrcScript Web Server (HTTP Module)
-Connection: close
-\r\n
-""" + co
-            c.send(httpres.encode("utf-8"))
-        else:
-            l = len(bytes(varlist["_modules_http"]["errors"]["404"], "utf-8"))
-            l = str(l+1)
-            co = varlist["_modules_http"]["errors"]["404"]
-            httpres = """HTTP/1.1 404 Not Found
-Content-Type: text/html; charset=UTF-8
-Content-Length: """ + l + """
-Server: Mrcomputer1 MrcScript Web Server (HTTP Module)
-Connection: close
-\r\n
-""" + co
-            c.send(httpres.encode("utf-8"))
+        try:
+            if httprequestparts[1] in varlist["_modules_http"]["pages"]:
+                l = len(bytes(varlist["_modules_http"]["pages"][httprequestparts[1]], "utf-8"))
+                l = str(l+1)
+                co = varlist["_modules_http"]["pages"][httprequestparts[1]]
+                httpres = """HTTP/1.1 200 OK
+    Content-Type: text/html; charset=UTF-8
+    Content-Length: """ + l + """
+    Server: Mrcomputer1 MrcScript Web Server (HTTP Module)
+    Connection: close
+    \r\n
+    """ + co
+                c.send(httpres.encode("utf-8"))
+            else:
+                l = len(bytes(varlist["_modules_http"]["errors"]["404"], "utf-8"))
+                l = str(l+1)
+                co = varlist["_modules_http"]["errors"]["404"]
+                httpres = """HTTP/1.1 404 Not Found
+    Content-Type: text/html; charset=UTF-8
+    Content-Length: """ + l + """
+    Server: Mrcomputer1 MrcScript Web Server (HTTP Module)
+    Connection: close
+    \r\n
+    """ + co
+                c.send(httpres.encode("utf-8"))
+        except IndexError:
+            pass
         c.close()

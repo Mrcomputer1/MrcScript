@@ -11,6 +11,7 @@ ERRORS = { #Still working on error system
 MODULES = {}
 GLOBALS = {}
 VARIABLES = {}
+FUNCTIONS = {}
 
 if len(sys.argv) == 1:
     print("MrcScript v" + VERSION )
@@ -50,14 +51,21 @@ else:
         for g in j['globals']:
             GLOBALS[g[0]] = g[1]
 
+    if 'functions' in j:
+        for f in j['functions']:
+            FUNCTIONS[f[0]] = f[1]
+
     if not 'program' in j:
         print(ERRORS["NO_PROGRAM"])
         sys.exit(1)
-    def runCommand(c):
+    def runCommand(c, var=None):
       global VARIABLES
+      global FUNCTIONS
       global GLOBALS
       global ERRORS
       global VERSION
+      if not var == None:
+          VARIABLES = var
       if isinstance(c[0], str):
          return
       if len(c[0]) == 1:
@@ -78,9 +86,24 @@ else:
                  for anarg in args[3]:
                      runCommand(anarg)
              return
-         varlist = eval("builtin." + c[0][0] + "(args, VARIABLES, GLOBALS)")
+         elif c[0][0] == "+":
+             VARIABLES[args[0]] = args[1] + args[2]
+             return
+         elif c[0][0] == "-":
+             VARIABLES[args[0]] = args[1] - args[2]
+             return
+         elif c[0][0] == "/":
+             VARIABLES[args[0]] = args[1] / args[2]
+             return
+         elif c[0][0] == "*":
+             VARIABLES[args[0]] = args[1] * args[2]
+             return
+         varlist = eval("builtin." + c[0][0] + "(args, VARIABLES, GLOBALS, runCommand)")
          VARIABLES = varlist
       else:
+         if c[0][0] == ":":
+             for f in FUNCTIONS[c[0][1]]:
+                 runCommand(f)
          args = c[1:]
          argi = 0
          for a in args:
@@ -90,7 +113,7 @@ else:
                elif a[0] == "global":
                   args[argi] = VARIABLES[a[1]]
             argi = argi + 1
-         varlist = eval("MODULES[c[0][0]]." + c[0][1] + "(args, VARIABLES, GLOBALS)")
+         varlist = eval("MODULES[c[0][0]]." + c[0][1] + "(args, VARIABLES, GLOBALS, runCommand)")
          VARIABLES = varlist
     for c in j['program']:
         runCommand(c)
